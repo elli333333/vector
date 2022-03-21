@@ -13,7 +13,7 @@
 #define MAGENTA             0x762671
 #define CYAN                0x30B5B8
 #define WHITE               0xCCCCCC
-#define BRIGHT_BLACK        0x000000
+#define BRIGHT_BLACK        0x7F7F7F
 #define BRIGHT_RED          0xFF0000
 #define BRIGHT_GREEN        0x00FF00
 #define BRIGHT_YELLOW       0xFFFF00
