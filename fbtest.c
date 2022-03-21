@@ -9,6 +9,8 @@
 #include <sys/ioctl.h>
 #include <sys/mman.h>
 
+#include <math.h>
+
 #include "ansi_colors.h"
 
 uint32_t pixel_color(uint32_t color, struct fb_var_screeninfo* vinfo) {
@@ -24,7 +26,54 @@ void test_pattern(struct fb_var_screeninfo *vinfo, struct fb_fix_screeninfo *fin
         for (int y = 0; y < vinfo->yres; y++) {
             long location =
                     (x + vinfo->xoffset) * (vinfo->bits_per_pixel / 8) + (y + vinfo->yoffset) * finfo->line_length;
-            *((uint32_t*)(fbp + location)) = pixel_color(YELLOW, vinfo);
+            if (x < vinfo->xres / 4 && y < vinfo->yres / 4) {
+                *((uint32_t*)(fbp + location)) = pixel_color(BLACK, vinfo);
+            }
+            else if (x < vinfo->xres / 2 && y < vinfo->yres / 4) {
+                *((uint32_t*)(fbp + location)) = pixel_color(RED, vinfo);
+            }
+            else if (x < (vinfo->xres / 4) * 3  && y < vinfo->yres / 4) {
+                *((uint32_t*)(fbp + location)) = pixel_color(GREEN, vinfo);
+            }
+            else if (x < vinfo->xres  && y < vinfo->yres / 4) {
+                *((uint32_t*)(fbp + location)) = pixel_color(YELLOW, vinfo);
+            }
+            else if (x < vinfo->xres / 4 && y < vinfo->yres / 2) {
+                *((uint32_t*)(fbp + location)) = pixel_color(BLUE, vinfo);
+            }
+            else if (x < vinfo->xres / 2 && y < vinfo->yres / 2) {
+                *((uint32_t*)(fbp + location)) = pixel_color(MAGENTA, vinfo);
+            }
+            else if (x < (vinfo->xres / 4) * 3  && y < vinfo->yres / 2) {
+                *((uint32_t*)(fbp + location)) = pixel_color(CYAN, vinfo);
+            }
+            else if (x < vinfo->xres  && y < vinfo->yres / 2) {
+                *((uint32_t*)(fbp + location)) = pixel_color(WHITE, vinfo);
+            }
+            else if (x < vinfo->xres / 4 && y < (vinfo->yres / 4) * 3) {
+                *((uint32_t*)(fbp + location)) = pixel_color(BRIGHT_BLACK, vinfo);
+            }
+            else if (x < vinfo->xres / 2 && y < (vinfo->yres / 4) * 3) {
+                *((uint32_t*)(fbp + location)) = pixel_color(BRIGHT_RED, vinfo);
+            }
+            else if (x < (vinfo->xres / 4) * 3  && y < (vinfo->yres / 4) * 3) {
+                *((uint32_t*)(fbp + location)) = pixel_color(BRIGHT_GREEN, vinfo);
+            }
+            else if (x < vinfo->xres  && y < (vinfo->yres / 4) * 3) {
+                *((uint32_t*)(fbp + location)) = pixel_color(BRIGHT_YELLOW, vinfo);
+            }
+            else if (x < vinfo->xres / 4 && y < vinfo->yres) {
+                *((uint32_t*)(fbp + location)) = pixel_color(BRIGHT_BLUE, vinfo);
+            }
+            else if (x < vinfo->xres / 2 && y < vinfo->yres) {
+                *((uint32_t*)(fbp + location)) = pixel_color(BRIGHT_MAGENTA, vinfo);
+            }
+            else if (x < (vinfo->xres / 4) * 3  && y < vinfo->yres) {
+                *((uint32_t*)(fbp + location)) = pixel_color(BRIGHT_CYAN, vinfo);
+            }
+            else if (x < vinfo->xres  && y < vinfo->yres) {
+                *((uint32_t*)(fbp + location)) = pixel_color(BRIGHT_WHITE, vinfo);
+            }
         }
     }
 }

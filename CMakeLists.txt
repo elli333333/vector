@@ -7,4 +7,4 @@ add_executable(vector main.cpp)
 target_link_libraries(vector -static)
 
 add_executable(fbtest fbtest.c ansi_colors.h)
-target_link_libraries(fbtest -static)
+target_link_libraries(fbtest -static m)
