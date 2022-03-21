@@ -15,13 +15,21 @@ uint32_t pixel_color(uint8_t r, uint8_t g, uint8_t b, struct fb_var_screeninfo* 
     return (r<<vinfo->red.offset) | (g<<vinfo->green.offset) | (b<<vinfo->blue.offset);
 }
 
+uint32_t pixel_color_ansi(uint32_t color, struct fb_var_screeninfo* vinfo) {
+    uint8_t r,g,b;
+    r = (color >> 16) & 0xFF;
+    g = (color >> 8) & 0xFF;
+    b = color & 0xFF;
+    return (r<<vinfo->red.offset) | (g<<vinfo->green.offset) | (b<<vinfo->blue.offset);
+}
+
 void test_pattern(struct fb_var_screeninfo *vinfo, struct fb_fix_screeninfo *finfo,  uint8_t *fbp) {
     for (int x = 0; x < vinfo->xres; x++) {
         for (int y = 0; y < vinfo->yres; y++) {
             long location =
                     (x + vinfo->xoffset) * (vinfo->bits_per_pixel / 8) + (y + vinfo->yoffset) * finfo->line_length;
-            *((uint32_t*)(fbp + location)) = pixel_color(0xff, 0x00, 0xff, vinfo);
-
+//            *((uint32_t*)(fbp + location)) = pixel_color(0xff, 0x00, 0xff, vinfo);~
+            *((uint32_t*)(fbp + location)) = pixel_color_ansi(MAGENTA, vinfo);
         }
     }
 }
