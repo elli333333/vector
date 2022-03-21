@@ -9,7 +9,7 @@
 #include <sys/ioctl.h>
 #include <sys/mman.h>
 
-#include <math.h>
+#include <string.h>
 
 #include "ansi_colors.h"
 
@@ -78,6 +78,16 @@ void test_pattern(struct fb_var_screeninfo *vinfo, struct fb_fix_screeninfo *fin
     }
 }
 
+void clear_scr(struct fb_var_screeninfo *vinfo, struct fb_fix_screeninfo *finfo,  uint8_t *fbp) {
+    for (int x = 0; x < vinfo->xres; ++x) {
+        *((uint32_t*)fbp + x) = pixel_color(WHITE, vinfo);
+    }
+    for (int y = 0; y < vinfo->yres; ++y) {
+        memcpy(fbp + vinfo->yoffset, fbp, (finfo->line_length));
+    }
+
+}
+
 int main() {
     struct fb_fix_screeninfo finfo;
     struct fb_var_screeninfo vinfo;
@@ -97,7 +107,8 @@ int main() {
 
     uint8_t *fbp = mmap(0, screensize, PROT_READ | PROT_WRITE, MAP_SHARED, fb_fd, (off_t)0);
 
-    test_pattern(&vinfo, &finfo, fbp);
+//    test_pattern(&vinfo, &finfo, fbp);
+    clear_scr(&vinfo, &finfo, fbp);
 
     return 0;
 }

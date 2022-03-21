@@ -5,7 +5,7 @@
 #ifndef VECTOR_ANSI_COLORS_H
 #define VECTOR_ANSI_COLORS_H
 
-#define BLACK               0x000000
+#define BLACK               0x010101
 #define RED                 0xDE382B
 #define GREEN               0x39B54A
 #define YELLOW              0xFFC706
