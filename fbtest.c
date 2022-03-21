@@ -28,8 +28,7 @@ void test_pattern(struct fb_var_screeninfo *vinfo, struct fb_fix_screeninfo *fin
         for (int y = 0; y < vinfo->yres; y++) {
             long location =
                     (x + vinfo->xoffset) * (vinfo->bits_per_pixel / 8) + (y + vinfo->yoffset) * finfo->line_length;
-//            *((uint32_t*)(fbp + location)) = pixel_color(0xff, 0x00, 0xff, vinfo);~
-            *((uint32_t*)(fbp + location)) = pixel_color_ansi(MAGENTA, vinfo);
+            *((uint32_t*)(fbp + location)) = pixel_color_ansi(CYAN, vinfo);
         }
     }
 }
