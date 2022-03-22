@@ -2,8 +2,8 @@
 // Created by ellie on 21/03/2022.
 //
 
-#ifndef VECTOR_ANSI_COLORS_H
-#define VECTOR_ANSI_COLORS_H
+#ifndef VECTOR_PALLET_ANSI_H
+#define VECTOR_PALLET_ANSI_H
 
 #define BLACK               0x010101
 #define RED                 0xDE382B
@@ -22,4 +22,4 @@
 #define BRIGHT_CYAN         0x00FFFF
 #define BRIGHT_WHITE        0xFFFFFF
 
-#endif //VECTOR_ANSI_COLORS_H
+#endif //VECTOR_PALLET_ANSI_H

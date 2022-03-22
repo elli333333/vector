@@ -11,13 +11,19 @@
 
 #include <string.h>
 
-#include "ansi_colors.h"
+#include "pallet_ansi.h"
 
 uint8_t * buf_a_ptr;
 uint8_t * buf_b_ptr;
 struct fb_var_screeninfo var_info;
 struct fb_fix_screeninfo fix_info;
 int fb_dev;
+
+//uint32_t * pixmap(int x, int y) {
+//    return ((uint32_t *)(buf_b_ptr + ((x+var_info.xoffset) * (var_info.bits_per_pixel/8) + (y+var_info.yoffset) * fix_info.line_length)));
+//}
+
+//uint32_t (buf_b_ptr)[fix_info.line_length / 4] = (uint32_t (*)[fix_info.line_length / 4]) pixmap;
 
 uint32_t set_pixel_color(uint32_t color) {
     uint8_t r,g,b;

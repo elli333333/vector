@@ -8,4 +8,4 @@ add_executable(vector
 
 add_executable(fbtest
         fbtest.c
-        ansi_colors.h)
+        pallet_ansi.h)
