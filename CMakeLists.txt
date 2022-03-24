@@ -8,4 +8,4 @@ add_executable(vector
 
 add_executable(fbtest
         fbtest.c
-        pallet_ansi.h)
+        pallet_ansi.h ext_memset.h)

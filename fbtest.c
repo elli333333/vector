@@ -12,6 +12,7 @@
 #include <string.h>
 
 #include "pallet_ansi.h"
+#include "ext_memset.h"
 
 #define pixel(x, y) *((uint32_t*)(buf_b_ptr + (x+var_info.xoffset) * (var_info.bits_per_pixel/8) + (y+var_info.yoffset) * fix_info.line_length))
 
@@ -54,16 +55,12 @@ void swap_buffers() {
 }
 
 void fill_src(uint32_t colour) {
-    for (int x = 0; x < var_info.xres; ++x) {
-        for (int y = 0; y < var_info.yres; ++y) {
-            pixel(x, y) = set_pixel_color(colour);
-        }
-    }
-}
-
-void fill_src_memset(uint8_t shade) {
     long screensize = var_info.yres_virtual * fix_info.line_length;
-    memset(buf_b_ptr, shade, screensize);
+    memset(buf_b_ptr, (uint8_t)colour >> 24, screensize);
+    memset(buf_b_ptr, (uint8_t)colour >> 16, screensize);
+    memset(buf_b_ptr, (uint8_t)colour >> 8, screensize);
+    memset(buf_b_ptr, (uint8_t)colour, screensize);
+
 }
 
 int main() {
