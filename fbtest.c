@@ -53,21 +53,20 @@ void swap_buffers() {
     memcpy(buf_a_ptr, buf_b_ptr, screensize);
 }
 
+inline static void memset_uint32(uint32_t* ptr, uint32_t val, size_t size){
+    while(size--) *ptr++ = val;
+}
+
 void fill_src(uint32_t colour) {
     long screensize = var_info.yres_virtual * fix_info.line_length;
-    memset(buf_b_ptr, (uint8_t)colour >> 24, screensize);
-    memset(buf_b_ptr, (uint8_t)colour >> 16, screensize);
-    memset(buf_b_ptr, (uint8_t)colour >> 8, screensize);
-    memset(buf_b_ptr, (uint8_t)colour, screensize);
-
+    memset_uint32(buf_b_ptr, colour, screensize/4);
 }
 
 int main() {
     init_fb();
 
-    fill_src(GREEN);
+    fill_src(CYAN);
     swap_buffers();
-
 
     return 0;
 }
