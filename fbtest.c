@@ -12,7 +12,6 @@
 #include <string.h>
 
 #include "pallet_ansi.h"
-#include "ext_memset.h"
 
 #define pixel(x, y) *((uint32_t*)(buf_b_ptr + (x+var_info.xoffset) * (var_info.bits_per_pixel/8) + (y+var_info.yoffset) * fix_info.line_length))
 
