@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include <fcntl.h>
 #include <linux/fb.h>
 #include <sys/ioctl.h>
@@ -13,7 +14,7 @@
 
 #include "pallet_ansi.h"
 
-#define pixel(x, y) *((uint32_t*)(buf_b_ptr + (x+var_info.xoffset) * (var_info.bits_per_pixel/8) + (y+var_info.yoffset) * fix_info.line_length))
+#define sgn(x) ((x<0)?-1:((x>0)?1:0)) // macro to return the sign of a number
 
 void * buf_a_ptr;
 void * buf_b_ptr;
@@ -62,10 +63,97 @@ void fill_src(uint32_t colour) {
     memset_uint32(buf_b_ptr, colour, screensize/4);
 }
 
+inline static void set_pixel(int rx, int ry, uint32_t colour) {
+    long loc = (rx+var_info.xoffset) * (var_info.bits_per_pixel/8) + (ry+var_info.yoffset) * fix_info.line_length;
+    if (loc > (var_info.yres_virtual * fix_info.line_length)) {
+        return;
+    }
+    *((uint32_t*)(buf_b_ptr + loc)) = colour;
+}
+
+void line(int x1, int y1, int x2, int y2, uint32_t colour) {
+    int dx, dy, sdx, sdy, dx_abs, dy_abs, x, y, px, py;
+
+    dx = x2 - x1;
+    dy = y2 - y1;
+
+    dx_abs = abs(dx);
+    dy_abs = abs(dy);
+
+    sdx = sgn(dx);
+    sdy = sgn(dy);
+    x = dy_abs >> 1;
+    y = dx_abs >> 1;
+    px = x1;
+    py = y1;
+
+    set_pixel(px, py, colour);
+
+    if (dx_abs > dy_abs) {
+        for (int i = 0; i < dx_abs; ++i) {
+            y += dy_abs;
+            if (y >= dx_abs) {
+                y -= dx_abs;
+                py += sdy;
+            }
+            px += sdx;
+            set_pixel(px, py, colour);
+        }
+    }
+    else {
+        for (int i = 0; i < dy_abs; ++i) {
+            x += dx_abs;
+            if (x >= dy_abs) {
+                x -= dy_abs;
+                px += sdx;
+            }
+            py += sdy;
+            set_pixel(px, py, colour);
+        }
+    }
+}
+
+void polygon(int no_vertices, int* vertices, uint32_t colour) {
+    for(int i=0;i<no_vertices-1;i++)
+    {
+        line(vertices[(i<<1)+0],
+             vertices[(i<<1)+1],
+             vertices[(i<<1)+2],
+             vertices[(i<<1)+3],
+             colour);
+    }
+    line(vertices[0],
+         vertices[1],
+         vertices[(no_vertices<<1)-2],
+         vertices[(no_vertices<<1)-1],
+         colour);
+}
+
+void rectangle_fill(int x1, int y1, int x2, int y2, uint32_t colour) {
+    for (int y = y1; y < y2; ++y) {
+        line(x1, y, x2, y, colour);
+    }
+}
+
+void rectangle(int x1, int y1, int x2, int y2, uint32_t colour) {
+    line(x1, y1, x1, y2, colour);
+    line(x1, y1, x2, y1, colour);
+    line(x1, y2, x2, y2, colour);
+    line(x2, y2, x2, y1, colour);
+}
+
+void circle(int cx, int cy, int radius, uint32_t colour) {
+
+}
+
 int main() {
     init_fb();
 
-    fill_src(CYAN);
+    fill_src(RED);
+    swap_buffers();
+
+
+    rectangle(100, 100, 500, 700, BRIGHT_WHITE);
     swap_buffers();
 
     return 0;
