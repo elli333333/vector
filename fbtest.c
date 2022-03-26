@@ -5,9 +5,11 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
+
 #include <fcntl.h>
 #include <linux/fb.h>
 #include <linux/kd.h>
+
 #include <sys/ioctl.h>
 #include <sys/mman.h>
 
@@ -23,7 +25,10 @@ struct fb_var_screeninfo var_info;
 struct fb_fix_screeninfo fix_info;
 int fb_dev;
 
-float rel_fb[240][240];
+
+#define scr_x 1024
+#define scr_y 768
+uint32_t rel_fb[scr_x][scr_y]; // relative scale framebuffer [x][y], adjusted such that rel_fb[0][0] is lower right
 
 uint32_t set_pixel_color(uint32_t color) {
     uint8_t r,g,b;
@@ -49,8 +54,8 @@ void init_fb() {
     buf_a_ptr = mmap(0, screensize, PROT_READ | PROT_WRITE, MAP_SHARED, fb_dev, (off_t)0);
     buf_b_ptr = mmap(0, screensize, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, (off_t)0);
 
-    int tty_dev = open("/dev/tty1", O_RDWR);
-    ioctl(tty_dev, KDSETMODE, KD_GRAPHICS);
+//    int tty_dev = open("/dev/tty1", O_RDWR);
+//    ioctl(tty_dev, KDSETMODE, KD_GRAPHICS);
 }
 
 void swap_buffers() {
@@ -66,6 +71,9 @@ inline static void memset_uint32(uint32_t* ptr, uint32_t val, size_t size){
 void fill_src(uint32_t colour) {
     long screensize = var_info.yres_virtual * fix_info.line_length;
     memset_uint32(buf_b_ptr, colour, screensize/4);
+    for (int x = 0; x < scr_x; ++x) {
+        memset_uint32(rel_fb[x], colour, scr_y);
+    }
 }
 
 inline static void set_pixel(int rx, int ry, uint32_t colour) {
@@ -151,16 +159,93 @@ void r_circle(int cx, int cy, int radius, uint32_t colour) {
 
 }
 
+void f_swap() {
+    for (int x = 0; x < scr_x; ++x) {
+        for (int y = 0; y < scr_y; ++y) {
+            set_pixel(x,(scr_y - y), rel_fb[x][y]);
+        }
+    }
+    swap_buffers();
+}
+
+void f_line(int x1, int y1, int x2, int y2, uint32_t colour) {
+    int dx, dy, sdx, sdy, dx_abs, dy_abs, x, y, px, py;
+
+    dx = x2 - x1;
+    dy = y2 - y1;
+
+    dx_abs = abs(dx);
+    dy_abs = abs(dy);
+
+    sdx = sgn(dx);
+    sdy = sgn(dy);
+    x = dy_abs >> 1;
+    y = dx_abs >> 1;
+    px = x1;
+    py = y1;
+
+    rel_fb[px][py] = colour;
+
+    if (dx_abs > dy_abs) {
+        for (int i = 0; i < dx_abs; ++i) {
+            y += dy_abs;
+            if (y >= dx_abs) {
+                y -= dx_abs;
+                py += sdy;
+            }
+            px += sdx;
+            rel_fb[px][py] = colour;
+        }
+    }
+    else {
+        for (int i = 0; i < dy_abs; ++i) {
+            x += dx_abs;
+            if (x >= dy_abs) {
+                x -= dy_abs;
+                px += sdx;
+            }
+            py += sdy;
+            rel_fb[px][py] = colour;
+        }
+    }
+}
+
+void f_polygon(int no_vertices, int* vertices, uint32_t colour) {
+    for(int i=0;i<no_vertices-1;i++)
+    {
+        f_line(vertices[(i << 1) + 0],
+               vertices[(i << 1) + 1],
+               vertices[(i << 1) + 2],
+               vertices[(i << 1) + 3],
+               colour);
+    }
+    f_line(vertices[0],
+           vertices[1],
+           vertices[(no_vertices << 1) - 2],
+           vertices[(no_vertices << 1) - 1],
+           colour);
+}
+
+void f_rectangle_fill(int x1, int y1, int x2, int y2, uint32_t colour) {
+    for (int y = y1; y < y2; ++y) {
+        f_line(x1, y, x2, y, colour);
+    }
+}
+
+void f_rectangle(int x1, int y1, int x2, int y2, uint32_t colour) {
+    f_line(x1, y1, x1, y2, colour);
+    f_line(x1, y1, x2, y1, colour);
+    f_line(x1, y2, x2, y2, colour);
+    f_line(x2, y2, x2, y1, colour);
+}
+
 int main() {
     init_fb();
 
-    fill_src(RED);
-    swap_buffers();
-
-
-    r_rectangle(100, 100, 500, 700, BRIGHT_WHITE);
-    r_rectangle_fill(101, 101, 499, 699, BLUE);
-    swap_buffers();
+    fill_src(BLUE);
+    f_rectangle(99, 99, 513, 513, BRIGHT_WHITE);
+    f_rectangle_fill(100, 100, 512, 512, BRIGHT_CYAN);
+    f_swap();
 
     return 0;
 }
