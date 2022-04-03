@@ -8,6 +8,6 @@ add_executable(vector
 
 add_executable(fbtest
         fbtest.c
-        pallet_ansi.h)
+        colour_utils.h)
 
 target_link_libraries(fbtest m)
