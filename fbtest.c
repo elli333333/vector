@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include <fcntl.h>
 #include <linux/fb.h>
@@ -17,6 +18,8 @@
 
 #include <math.h>
 #include <complex.h>
+
+#include <ncurses.h>
 
 #include "colour_utils.h"
 
@@ -88,13 +91,8 @@ inline static void set_pixel(int rx, int ry, uint32_t colour) {
     *((uint32_t*)(buf_b_ptr + loc)) = colour;
 }
 
-void escape_time() {
+void escape_time(double left, double right, double top, double bottom) {
     int max_iter = 1024;
-
-    double left = -2,
-        right = 1,
-        top = 1.125,
-        bottom = -1.125;
 
     double complex c, z;
     int iterations;
@@ -124,14 +122,54 @@ void escape_time() {
 int main() {
     init_fb();
 
-//    fill_src(BLUE);
-//    f_rectangle(99, 99, 513, 513, BRIGHT_WHITE);
-//    f_rectangle_fill(100, 100, 512, 512, BRIGHT_CYAN);
-//    f_swap();
+    initscr();
+    noecho();
+    raw();
+    noecho();
+    keypad(stdscr, TRUE);
+    nodelay(stdscr, TRUE);
 
-    escape_time();
+    bool running = true;
+
+    double left = -2,
+            right = 1,
+            top = 1.125,
+            bottom = -1.125;
+
+    fill_src(BLUE);
     swap_buffers();
 
+    while (running) {
+        int key = getch();
+        switch (key) {
+            case 'q':
+                running = false;
+                break;
+            case 'w':
+                top += 0.01;
+                bottom += 0.01;
+                break;
+            case 's':
+                top -= 0.01;
+                bottom -= 0.01;
+                break;
+            case 'a':
+                left += 0.01;
+                right += 0.01;
+                break;
+            case 'd':
+                left -= 0.01;
+                right -= 0.01;
+                break;
+            default:
+                ;
+        }
+
+        escape_time(left, right, top, bottom);
+        swap_buffers();
+    }
+
+    endwin();
     ioctl(tty_dev,KDSETMODE,KD_TEXT);
     return 0;
 }
