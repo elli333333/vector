@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.18)
 project(vector)
 
-add_subdirectory(SDL/)
-
 set(CMAKE_CXX_STANDARD 20)
+
+
 
 add_executable(vector
         src/main.cpp
