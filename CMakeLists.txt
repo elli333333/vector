@@ -19,10 +19,12 @@ add_subdirectory(SDL/sdl2-src)
 
 add_executable(vector
         src/main.cpp
-        src/colour_utils.h src/core.cpp src/core.hpp)
+        src/colour_utils.h
+        src/core.cpp
+        src/core.hpp)
 
 target_link_libraries(vector
-        #PRIVATE SDL2::SDL2-static
+        PRIVATE SDL2::SDL2-static
         m
         )
 
