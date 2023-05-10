@@ -3,4 +3,5 @@
 /cmake-build-release/
 /cmake-build-relwithdebinfo/
 /cmake-build-debug-gcc/
+./SDL/
 .idea
