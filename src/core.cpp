@@ -61,7 +61,7 @@ void core::render() {
     SDL_SetRenderDrawColor(main_Renderer, 0, 0, 0, 0xFF);
     SDL_RenderClear(main_Renderer);
 
-    draw_window_border(0xaaaaaaFF);
+    draw_window_border(orange);
 
     SDL_RenderPresent(main_Renderer);
 }
