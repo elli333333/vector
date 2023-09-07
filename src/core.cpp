@@ -79,3 +79,7 @@ void core::event_handler() {
     }
 }
 
+bool core::is_active() {
+    return active;
+}
+

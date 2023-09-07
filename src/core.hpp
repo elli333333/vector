@@ -22,13 +22,14 @@ private:
     int init(const std::string& windowTitle, uint16_t x, uint16_t y);
     void draw_window_border(uint32_t rgba);
 
+    std::atomic<bool> active = false;
 public:
     core();
     core(const std::string& windowTitle, uint16_t x, uint16_t y);
 
     ~core();
 
-    std::atomic<bool> active = false;
+    bool is_active();
 
     void render();
     void event_handler();
