@@ -21,7 +21,9 @@ add_executable(vector
         src/main.cpp
         src/colour_utils.h
         src/core.cpp
-        src/core.hpp)
+        src/core.hpp
+        src/entity.cpp
+        src/entity.hpp)
 
 target_link_libraries(vector
         PRIVATE SDL2::SDL2-static
