@@ -1,8 +1,6 @@
-#include <iostream>
-#include <memory>
-
-// Local Headers
+#include "common.hpp"
 #include "core.hpp"
+#include "entity.hpp"
 
 
 int main(int argc, char *argv[]) {

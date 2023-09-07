@@ -6,7 +6,7 @@
 core::core() {
     init("untitled", 640, 480);
 }
-core::core(const std::string& windowTitle, uint16_t x, uint16_t y) {
+core::core(const std::string& windowTitle, u16 x, u16 y) {
     init(windowTitle, x, y);
     window_w = x;
     window_h = y;
@@ -22,7 +22,7 @@ core::~core() {
     SDL_Quit();
 }
 
-int core::init(const std::string& windowTitle, uint16_t x, uint16_t y) {
+int core::init(const std::string& windowTitle, u16 x, u16 y) {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         std::cerr << "Unable to init SDL: " << SDL_GetError() << std::endl;
         return 1;
@@ -43,11 +43,11 @@ int core::init(const std::string& windowTitle, uint16_t x, uint16_t y) {
     return 0;
 }
 
-void core::draw_window_border(uint32_t rgba) {
-    uint8_t a = rgba & 0xff;
-    uint8_t b = rgba >> 8 & 0xff;
-    uint8_t g = rgba >> 16 & 0xff;
-    uint8_t r = rgba >> 24 & 0xff;
+void core::draw_window_border(u32 rgba) {
+    u8 a = rgba & 0xff;
+    u8 b = rgba >> 8 & 0xff;
+    u8 g = rgba >> 16 & 0xff;
+    u8 r = rgba >> 24 & 0xff;
 
     SDL_SetRenderDrawColor(main_Renderer, r, g, b, a);
     SDL_Rect border;

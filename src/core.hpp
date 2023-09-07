@@ -5,12 +5,8 @@
 #ifndef VECTOR_CORE_HPP
 #define VECTOR_CORE_HPP
 
-#include <string>
-#include <memory>
-#include <iostream>
-#include <atomic>
+#include "common.hpp"
 
-#include "SDL.h"
 
 class core {
 private:
