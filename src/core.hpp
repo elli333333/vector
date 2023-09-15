@@ -15,6 +15,10 @@ private:
 
     int window_w = 0, window_h = 0;
 
+    std::thread event_mgr = std::thread(&core::event_handler, this);
+    std::thread render_thread = std::thread(&core::render, this);
+    std::thread entity_mgr = std::thread(&core::event_handler, this);
+
     int init(const std::string& windowTitle, uint16_t x, uint16_t y);
     void draw_window_border(uint32_t rgba);
 
@@ -29,6 +33,8 @@ public:
 
     void render();
     void event_handler();
+
+    [[maybe_unused]] void entity_handler();
 };
 
 

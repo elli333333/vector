@@ -19,6 +19,10 @@ core::~core() {
     SDL_DestroyRenderer(main_Renderer);
     main_Renderer = nullptr;
 
+    event_mgr.join();
+    render_thread.join();
+    entity_mgr.join();
+
     SDL_Quit();
 }
 
@@ -58,28 +62,37 @@ void core::draw_window_border(u32 rgba) {
 }
 
 void core::render() {
-    SDL_SetRenderDrawColor(main_Renderer, 0, 0, 0, 0xFF);
-    SDL_RenderClear(main_Renderer);
+    while(active) {
+        SDL_SetRenderDrawColor(main_Renderer, 0, 0, 0, 0xFF);
+        SDL_RenderClear(main_Renderer);
 
-    draw_window_border(orange);
+        draw_window_border(orange);
 
-    SDL_RenderPresent(main_Renderer);
+        SDL_RenderPresent(main_Renderer);
+    }
 }
 
 void core::event_handler() {
     SDL_Event event;
-    if(SDL_PollEvent(&event)) {
-        switch (event.type) {
-            case SDL_QUIT:
-                active = false;
-                break;
-            default:
-                break;
+    while(active) {
+        if (SDL_PollEvent(&event)) {
+            switch (event.type) {
+                case SDL_QUIT:
+                    active = false;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
 
 bool core::is_active() {
     return active;
+}
+
+
+// TODO
+void core::entity_handler() {
 }
 

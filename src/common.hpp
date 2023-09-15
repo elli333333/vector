@@ -10,6 +10,7 @@
 #include <memory>
 #include <iostream>
 #include <atomic>
+#include <thread>
 
 #include "SDL.h"
 
