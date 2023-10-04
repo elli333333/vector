@@ -11,7 +11,6 @@
 class core {
 private:
     SDL_Window *Window = nullptr;
-//    SDL_Renderer *main_Renderer = nullptr;
 
     std::unique_ptr<SDL_Renderer*> main_Renderer = nullptr;
 
@@ -19,7 +18,6 @@ private:
 
     int init(const std::string& windowTitle, u16 x, u16 y);
     void draw_window_border(u32 rgba, SDL_Renderer *renderer);
-    static void set_colour(u32 rgba, SDL_Renderer *renderer);
 
     std::atomic<bool> active = false;
 

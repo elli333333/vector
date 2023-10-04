@@ -15,6 +15,8 @@
 
 #include "SDL.h"
 
+#define set_colour(rgba, renderer_ptr) (SDL_SetRenderDrawColor(renderer_ptr, (rgba >> 24 & 0xff), (rgba >> 16 & 0xff), (rgba >> 8 & 0xff), (rgba & 0xff)))
+
 typedef uint64_t u64;
 typedef uint32_t u32;
 typedef uint16_t u16;

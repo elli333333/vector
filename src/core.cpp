@@ -40,8 +40,8 @@ int core::init(const std::string& windowTitle, u16 x, u16 y) {
         std::cerr << "Unable to init Renderer: " << SDL_GetError() << std::endl;
         return 1;
     }
-    start_threads();
     active = true;
+    start_threads();
     return 0;
 }
 
@@ -55,13 +55,14 @@ void core::draw_window_border(u32 rgba, SDL_Renderer *renderer) {
 }
 
 void core::render(std::unique_ptr<SDL_Renderer *> renderer) {
-    std::cout << "render thread active\n";;
+    std::cout << "render thread active\n";
 
     while(active) {
-        set_colour(pink, *renderer);
+        set_colour(white, *renderer);
         SDL_RenderClear(*renderer);
+        SDL_RenderPresent(*renderer);
 
-        draw_window_border(orange, *renderer);
+        draw_window_border(black, *renderer);
 
         SDL_RenderPresent(*renderer);
     }
@@ -99,15 +100,6 @@ void core::watchdog() {
     while(active) {
 
     }
-}
-
-void core::set_colour(u32 rgba, SDL_Renderer *renderer) {
-        u8 a = rgba & 0xff;
-        u8 b = rgba >> 8 & 0xff;
-        u8 g = rgba >> 16 & 0xff;
-        u8 r = rgba >> 24 & 0xff;
-
-        SDL_SetRenderDrawColor(renderer, r, g, b, a);
 }
 
 
