@@ -16,10 +16,6 @@ core::~core() {
     SDL_DestroyWindow(Window);
     Window = nullptr;
 
-//    SDL_DestroyRenderer(main_Renderer.get());
-//    main_Renderer = nullptr;
-
-
     event_mgr.join();
     render_thread.join();
     entity_mgr.join();
@@ -44,8 +40,8 @@ int core::init(const std::string& windowTitle, u16 x, u16 y) {
         std::cerr << "Unable to init Renderer: " << SDL_GetError() << std::endl;
         return 1;
     }
+    start_threads();
     active = true;
-//    start_threads();
     return 0;
 }
 
@@ -62,12 +58,12 @@ void core::render(std::unique_ptr<SDL_Renderer *> renderer) {
     std::cout << "render thread active\n";;
 
     while(active) {
-        set_colour(pink, *renderer.get());
-        SDL_RenderClear(*renderer.get());
+        set_colour(pink, *renderer);
+        SDL_RenderClear(*renderer);
 
-        draw_window_border(orange, *renderer.get());
+        draw_window_border(orange, *renderer);
 
-        SDL_RenderPresent(*renderer.get());
+        SDL_RenderPresent(*renderer);
     }
     std::cout << "render thread joinable\n";
 }

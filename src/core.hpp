@@ -29,7 +29,7 @@ private:
 
     void start_threads() {
         event_mgr = std::thread(&core::event_handler, this);
-        render_thread = std::thread(&core::render, this, std::ref(main_Renderer));
+        render_thread = std::thread(&core::render, this, std::move(main_Renderer));
         entity_mgr = std::thread(&core::entity_handler, this);
     }
 public:
@@ -40,7 +40,7 @@ public:
 
     bool is_active();
 
-    static void render(std::unique_ptr<SDL_Renderer *> renderer);
+    void render(std::unique_ptr<SDL_Renderer *> renderer);
     void event_handler();
     void entity_handler();
 
