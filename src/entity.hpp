@@ -33,7 +33,7 @@ protected:
     tag entity_tag = tag::undefined;
     shape entity_shape = shape::point;
 
-    bool is_hostile = entity_tag == tag::enemy ? true : false;
+    bool is_hostile = (entity_tag == tag::enemy);
 
     u32 entity_colour;
 

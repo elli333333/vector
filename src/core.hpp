@@ -11,18 +11,27 @@
 class core {
 private:
     SDL_Window *Window = nullptr;
-    SDL_Renderer *main_Renderer = nullptr;
+//    SDL_Renderer *main_Renderer = nullptr;
+
+    std::unique_ptr<SDL_Renderer*> main_Renderer = nullptr;
 
     int window_w = 0, window_h = 0;
 
-    std::thread event_mgr = std::thread(&core::event_handler, this);
-    std::thread render_thread = std::thread(&core::render, this);
-    std::thread entity_mgr = std::thread(&core::event_handler, this);
-
-    int init(const std::string& windowTitle, uint16_t x, uint16_t y);
-    void draw_window_border(uint32_t rgba);
+    int init(const std::string& windowTitle, u16 x, u16 y);
+    void draw_window_border(u32 rgba, SDL_Renderer *renderer);
+    static void set_colour(u32 rgba, SDL_Renderer *renderer);
 
     std::atomic<bool> active = false;
+
+    std::thread event_mgr;
+    std::thread render_thread;
+    std::thread entity_mgr;
+
+    void start_threads() {
+        event_mgr = std::thread(&core::event_handler, this);
+        render_thread = std::thread(&core::render, this, std::ref(main_Renderer));
+        entity_mgr = std::thread(&core::entity_handler, this);
+    }
 public:
     core();
     core(const std::string& windowTitle, uint16_t x, uint16_t y);
@@ -31,10 +40,11 @@ public:
 
     bool is_active();
 
-    void render();
+    static void render(std::unique_ptr<SDL_Renderer *> renderer);
     void event_handler();
+    void entity_handler();
 
-    [[maybe_unused]] void entity_handler();
+    void watchdog();
 };
 
 

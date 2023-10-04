@@ -16,8 +16,9 @@ core::~core() {
     SDL_DestroyWindow(Window);
     Window = nullptr;
 
-    SDL_DestroyRenderer(main_Renderer);
-    main_Renderer = nullptr;
+//    SDL_DestroyRenderer(main_Renderer.get());
+//    main_Renderer = nullptr;
+
 
     event_mgr.join();
     render_thread.join();
@@ -38,41 +39,41 @@ int core::init(const std::string& windowTitle, u16 x, u16 y) {
         return 1;
     }
 
-    main_Renderer = SDL_CreateRenderer(Window, -1, 0);
+    main_Renderer = std::make_unique<SDL_Renderer*>(SDL_CreateRenderer(Window, -1, 0));
     if (main_Renderer == nullptr) {
         std::cerr << "Unable to init Renderer: " << SDL_GetError() << std::endl;
         return 1;
     }
     active = true;
+//    start_threads();
     return 0;
 }
 
-void core::draw_window_border(u32 rgba) {
-    u8 a = rgba & 0xff;
-    u8 b = rgba >> 8 & 0xff;
-    u8 g = rgba >> 16 & 0xff;
-    u8 r = rgba >> 24 & 0xff;
-
-    SDL_SetRenderDrawColor(main_Renderer, r, g, b, a);
+void core::draw_window_border(u32 rgba, SDL_Renderer *renderer) {
+    set_colour(rgba, renderer);
     SDL_Rect border;
     border.x = 0, border.y = 0;
     border.h = window_h;
     border.w = window_w;
-    SDL_RenderDrawRect(main_Renderer, &border);
+    SDL_RenderDrawRect(renderer, &border);
 }
 
-void core::render() {
+void core::render(std::unique_ptr<SDL_Renderer *> renderer) {
+    std::cout << "render thread active\n";;
+
     while(active) {
-        SDL_SetRenderDrawColor(main_Renderer, 0, 0, 0, 0xFF);
-        SDL_RenderClear(main_Renderer);
+        set_colour(pink, *renderer.get());
+        SDL_RenderClear(*renderer.get());
 
-        draw_window_border(orange);
+        draw_window_border(orange, *renderer.get());
 
-        SDL_RenderPresent(main_Renderer);
+        SDL_RenderPresent(*renderer.get());
     }
+    std::cout << "render thread joinable\n";
 }
 
 void core::event_handler() {
+    std::cout << "event handler active\n";
     SDL_Event event;
     while(active) {
         if (SDL_PollEvent(&event)) {
@@ -85,6 +86,8 @@ void core::event_handler() {
             }
         }
     }
+    std::cout << "event handler joinable\n";
+
 }
 
 bool core::is_active() {
@@ -95,4 +98,20 @@ bool core::is_active() {
 // TODO
 void core::entity_handler() {
 }
+
+void core::watchdog() {
+    while(active) {
+
+    }
+}
+
+void core::set_colour(u32 rgba, SDL_Renderer *renderer) {
+        u8 a = rgba & 0xff;
+        u8 b = rgba >> 8 & 0xff;
+        u8 g = rgba >> 16 & 0xff;
+        u8 r = rgba >> 24 & 0xff;
+
+        SDL_SetRenderDrawColor(renderer, r, g, b, a);
+}
+
 

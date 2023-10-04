@@ -11,6 +11,7 @@
 #include <iostream>
 #include <atomic>
 #include <thread>
+#include <functional>
 
 #include "SDL.h"
 
