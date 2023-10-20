@@ -45,7 +45,7 @@ int core::init(const std::string& windowTitle, u16 x, u16 y) {
     return 0;
 }
 
-void core::draw_window_border(u32 rgba, SDL_Renderer *renderer) {
+void core::draw_window_border(u32 rgba, SDL_Renderer *renderer) const {
     set_colour(rgba, renderer);
     SDL_Rect border;
     border.x = 0, border.y = 0;

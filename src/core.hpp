@@ -5,7 +5,7 @@
 #ifndef VECTOR_CORE_HPP
 #define VECTOR_CORE_HPP
 
-#include "common.hpp"
+#include "engine/common.hpp"
 
 
 class core {
@@ -17,7 +17,7 @@ private:
     int window_w = 0, window_h = 0;
 
     int init(const std::string& windowTitle, u16 x, u16 y);
-    void draw_window_border(u32 rgba, SDL_Renderer *renderer);
+    void draw_window_border(u32 rgba, SDL_Renderer *renderer) const;
 
     std::atomic<bool> active = false;
 
