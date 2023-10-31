@@ -26,7 +26,9 @@ add_executable(vector
         src/entity.hpp
         src/engine/common.hpp
         src/engine/renderer.cpp
-        src/engine/renderer.hpp)
+        src/engine/renderer.hpp
+        src/engine/vec2.cpp
+        src/engine/vec2.hpp)
 
 target_link_libraries(vector
         PRIVATE SDL2::SDL2-static
