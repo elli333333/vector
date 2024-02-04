@@ -12,6 +12,13 @@
 #include <atomic>
 #include <thread>
 #include <functional>
+#include <chrono>
+
+#include <fmt/core.h>
+#include <fmt/format.h>
+#include <fmt/chrono.h>
+#include <fmt/color.h>
+#include <fmt/printf.h>
 
 #include "SDL.h"
 
@@ -27,6 +34,13 @@ namespace vector {
     typedef int16_t i16;
     typedef int8_t i8;
 
+
+    typedef float_t f32;
+    typedef double_t f64;
+
+    typedef std::pair<f32, f32> f_coord;
+    typedef std::pair<i32, i32> i_coord;
+
     enum colour {
         red = 0xFF0000FF,
         green = 0x00FF00FF,
@@ -40,5 +54,10 @@ namespace vector {
         orange = 0xfc8405ff,
 
     };
+
+    void print_error(){
+        auto const t = std::chrono::system_clock::now();
+        fmt::print(stderr, fg(fmt::color::red),"[{:%T}] - Error: {}", t, SDL_GetError());
+    }
 }
 #endif //VECTOR_COMMON_HPP

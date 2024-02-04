@@ -5,4 +5,7 @@
 #include "renderer.hpp"
 
 namespace vector {
+    renderer::renderer() {
+
+    }
 } // vector

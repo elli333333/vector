@@ -8,7 +8,9 @@
 namespace vector {
 
     class renderer {
-
+    private:
+        renderer();
+        ~renderer();
     };
 
 } // vector
