@@ -21,7 +21,7 @@
 
 #include <ncurses.h>
 
-#include "../src/colour_utils.h"
+#include "../oldsrc/colour_utils.h"
 
 #define sgn(x) ((x<0)?-1:((x>0)?1:0)) // macro to return the sign of a number
 
