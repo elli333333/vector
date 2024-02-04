@@ -5,7 +5,7 @@
 #ifndef VECTOR_CORE_HPP
 #define VECTOR_CORE_HPP
 
-#include "engine/common.hpp"
+#include "../src/engine/common.hpp"
 
 
 class core {

@@ -5,7 +5,7 @@
 #ifndef VECTOR_ENTITY_HPP
 #define VECTOR_ENTITY_HPP
 
-#include "engine/common.hpp"
+#include "../src/engine/common.hpp"
 
 enum tag {
     undefined,
