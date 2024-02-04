@@ -4,7 +4,7 @@ project(vector)
 
 set(CMAKE_CXX_STANDARD 20)
 
-set(FETCHCONTENT_BASE_DIR ${PROJECT_SOURCE_DIR}/SDL)
+set(FETCHCONTENT_BASE_DIR ${PROJECT_SOURCE_DIR}/Dependencies)
 
 FetchContent_Declare(
         SDL2
@@ -15,28 +15,29 @@ FetchContent_Declare(
 FetchContent_GetProperties(SDL2)
 FetchContent_Populate(SDL2)
 
-add_subdirectory(SDL/sdl2-src)
+add_subdirectory(Dependencies/sdl2-src)
+
+FetchContent_Declare(
+        fmt
+        GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+        GIT_TAG e69e5f977d458f2650bb346dadf2ad30c5320281 #{fmt} 10.2.1
+)
+
+FetchContent_GetProperties(fmt)
+FetchContent_Populate(fmt)
+
+add_subdirectory(Dependencies/fmt-src)
 
 add_executable(vector
         src/main.cpp
-        src/colour_utils.h
-        src/core.cpp
-        src/core.hpp
-        src/entity.cpp
-        src/entity.hpp
         src/engine/common.hpp
         src/engine/renderer.cpp
         src/engine/renderer.hpp
-        src/engine/vec2.cpp
-        src/engine/vec2.hpp)
+        src/engine/core.cpp
+        src/engine/core.hpp)
 
 target_link_libraries(vector
         PRIVATE SDL2::SDL2-static
+        PRIVATE fmt::fmt
         m
         )
-
-#add_executable(fbtest
-#        fbtest.c
-#        colour_utils.h)
-#
-#target_link_libraries(fbtest m)
