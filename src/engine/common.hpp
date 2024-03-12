@@ -13,6 +13,7 @@
 #include <thread>
 #include <functional>
 #include <chrono>
+#include <vector>
 
 #include <fmt/core.h>
 #include <fmt/format.h>
@@ -52,12 +53,20 @@ namespace vector {
         pink = 0xfc05caff,
         purple = 0x9505fcff,
         orange = 0xfc8405ff,
-
+        cyan = 0x00D3EEFF,
+        lilac = 0xC383FCFF,
+        teal = 0x019285FF,
+        lime = 0x65FF00FF,
+        light_grey = 0x979797FF,
+        dark_grey = 0x2A2A2AFF,
+        peach = 0xFF7D29FF,
     };
 
-    void print_error(){
-        auto const t = std::chrono::system_clock::now();
-        fmt::print(stderr, fg(fmt::color::red),"[{:%T}] - Error: {}", t, SDL_GetError());
+    inline void print_SDL_error(){
+        fmt::print(stdout, fg(fmt::color::red),"[{:%T}] - Error: {}\n",
+                   std::chrono::system_clock::now(), SDL_GetError());
+        fmt::print(stdout, fg(fmt::color::white), "");
+        SDL_ClearError();
     }
 }
 #endif //VECTOR_COMMON_HPP

@@ -1,8 +1,10 @@
-#include "engine/common.hpp"
+#include "engine/core.hpp"
 
-int main(int argc, char *argv[]) {
 
-    fmt::print("hello world");
 
+int main() {
+
+    fmt::print("hello world\n");
+    vector::core game("test");
     return 0;
 }

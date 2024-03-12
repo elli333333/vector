@@ -41,3 +41,5 @@ target_link_libraries(vector
         PRIVATE fmt::fmt
         m
         )
+
+target_compile_options(vector PRIVATE -Wall -Wextra -Wpedantic -Werror)

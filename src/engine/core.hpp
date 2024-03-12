@@ -6,13 +6,24 @@
 #define VECTOR_CORE_HPP
 
 #include "common.hpp"
+#include "renderer.hpp"
 
 namespace vector {
     class core {
     private:
-        SDL_Window *window = nullptr;
+        std::unique_ptr<SDL_Window *> window = nullptr;
+
+        std::shared_ptr<SDL_Surface *> front = nullptr;
+        std::shared_ptr<SDL_Surface *> back = nullptr;
+
+        void loop();
+
     public:
-        core(std::string window_title);
+        explicit core(const std::string& window_title);
+        ~core();
+
+        std::unique_ptr<vector::renderer> renderer = nullptr;
+
     };
 }
 
