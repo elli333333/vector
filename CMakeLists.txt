@@ -7,7 +7,6 @@ set(CMAKE_CXX_STANDARD 20)
 set(FETCHCONTENT_BASE_DIR ${PROJECT_SOURCE_DIR}/Dependencies)
 
 
-if (NOT TARGET SDL2)
 FetchContent_Declare(
         SDL2
         GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
@@ -15,12 +14,10 @@ FetchContent_Declare(
 )
 
 FetchContent_GetProperties(SDL2)
-FetchContent_MakeAvailable(SDL2)
-endif ()
+FetchContent_Populate(SDL2)
 
 add_subdirectory(Dependencies/sdl2-src)
 
-if (NOT TARGET fmt)
 FetchContent_Declare(
         fmt
         GIT_REPOSITORY https://github.com/fmtlib/fmt.git
@@ -28,8 +25,7 @@ FetchContent_Declare(
 )
 
 FetchContent_GetProperties(fmt)
-FetchContent_MakeAvailable(fmt)
-endif ()
+FetchContent_Populate(fmt)
 
 add_subdirectory(Dependencies/fmt-src)
 
