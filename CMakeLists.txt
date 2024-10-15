@@ -13,7 +13,7 @@ FetchContent_Declare(
 )
 
 FetchContent_GetProperties(SDL2)
-FetchContent_Populate(SDL2)
+FetchContent_MakeAvailable(SDL2)
 
 add_subdirectory(Dependencies/sdl2-src)
 
@@ -24,7 +24,7 @@ FetchContent_Declare(
 )
 
 FetchContent_GetProperties(fmt)
-FetchContent_Populate(fmt)
+FetchContent_MakeAvailable(fmt)
 
 add_subdirectory(Dependencies/fmt-src)
 
