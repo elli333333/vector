@@ -14,9 +14,7 @@ FetchContent_Declare(
 )
 
 FetchContent_GetProperties(SDL2)
-FetchContent_Populate(SDL2)
-
-add_subdirectory(Dependencies/sdl2-src)
+FetchContent_MakeAvailable(SDL2)
 
 FetchContent_Declare(
         fmt
@@ -25,17 +23,12 @@ FetchContent_Declare(
 )
 
 FetchContent_GetProperties(fmt)
-FetchContent_Populate(fmt)
-
-add_subdirectory(Dependencies/fmt-src)
+FetchContent_MakeAvailable(fmt)
 
 add_executable(vector
         src/main.cpp
-        src/engine/common.hpp
-        src/engine/renderer.cpp
-        src/engine/renderer.hpp
-        src/engine/core.cpp
-        src/engine/core.hpp)
+
+)
 
 target_link_libraries(vector
         PRIVATE SDL2::SDL2-static
