@@ -1,10 +1,3 @@
-#include "engine/core.hpp"
-
-
-
-int main() {
-
-    fmt::print("hello world\n");
-    vector::core game("test");
-    return 0;
-}
+//
+// Created by ellie on 15/10/24.
+//
