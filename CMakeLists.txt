@@ -5,8 +5,6 @@ vcpkg_init()
 
 project(vector)
 
-vcpkg_add_package(sdl2)
-vcpkg_add_package(fmt)
 find_package(fmt CONFIG REQUIRED)
 find_package(SDL2 CONFIG REQUIRED)
 
