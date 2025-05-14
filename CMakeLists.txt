@@ -6,7 +6,6 @@ vcpkg_init()
 project(vector)
 
 find_package(fmt CONFIG REQUIRED)
-find_package(SDL2 CONFIG REQUIRED)
 
 add_executable(vector
         src/main.cpp
