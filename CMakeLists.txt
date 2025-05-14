@@ -1,18 +1,35 @@
-cmake_minimum_required(VERSION 3.18)
-set(ENV{VCPKG_ROOT} [])
-set(CMAKE_TOOLCHAIN_FILE )
+cmake_minimum_required(VERSION 3.24)
+set(CMAKE_CXX_STANDARD 20)
+include(vcpkg.cmake)
+vcpkg_init()
+
 project(vector)
 
-set(CMAKE_CXX_STANDARD 20)
+vcpkg_add_package(sdl2)
+vcpkg_add_package(fmt)
+find_package(fmt CONFIG REQUIRED)
+find_package(SDL2 CONFIG REQUIRED)
 
 add_executable(vector
         src/main.cpp
 )
 
-target_link_libraries(vector
-#        PRIVATE SDL2::SDL2-static
-#        PRIVATE fmt::fmt
-#        m
-        )
 
-target_compile_options(vector PRIVATE)# -Wall -Wextra -Wpedantic -Werror)
+set_property(TARGET vector PROPERTY COMPILE_WARNING_AS_ERROR ON)
+
+set(DEPENDS ;)
+list(APPEND DEPENDS PRIVATE fmt::fmt)
+
+if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
+        list(APPEND DEPENDS m)
+endif ()
+
+if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
+#    list(APPEND DEPENDS m)
+endif ()
+
+message(${DEPENDS})
+
+target_link_libraries(vector
+        ${DEPENDS}
+        )
